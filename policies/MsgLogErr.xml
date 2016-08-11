@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MessageLogging  async="false" continueOnError="true" enabled="true" name="MsgLogErr">
+   <File>
+
+    <Message>{system.time},{request.path},{response.status.code},content:\n{errorContent}</Message>
+
+      <FileName>ErrResponse.log</FileName>
+      <FileRotationOptions rotateFileOnStartup="true">
+        <FileRotationType>SIZE</FileRotationType>
+        <MaxFileSizeInMB>1</MaxFileSizeInMB>
+        <MaxFilesToRetain>3</MaxFilesToRetain>
+      </FileRotationOptions>
+  </File>
+</MessageLogging>

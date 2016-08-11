@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignSpikeArrestViolationError">
+    <Set>
+        <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+          {
+        	"code": 429,
+            "message": "Too many requests",
+            "date": "@system.time.year#-@system.time.month#-@system.time.day# @system.time.hour#:@system.time.minute#:@system.time.second#"
+          }
+    	</Payload>
+        <StatusCode>429</StatusCode>
+        <ReasonPhrase>Too many requests</ReasonPhrase>
+    </Set>
+    <AssignVariable>
+        <Name>errorHandled</Name>
+        <Value>true</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

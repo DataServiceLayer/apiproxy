@@ -1,0 +1,17 @@
+{
+  "name": "createOrder",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "async": "1.5.2",
+    "body-parser": "1.12.4",
+    "dateformat": "1.0.12",
+    "debug": "2.2.0",
+    "express": "4.13.4",
+    "jsonschema": "1.1.0",
+    "morgan": "1.6.1",
+    "winston": "2.2.0",
+    "xml2js": "0.4.16"
+	"jdbc":"0.3.2-pre.0"
+  }
+}

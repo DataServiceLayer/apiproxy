@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RaiseFault async="false" continueOnError="false" enabled="true" name="RaiseFaultGeneric">
+    <FaultResponse>
+        <Set>
+            <Payload contentType="application/json">{"Service Call Error": "Invalid path/method."}</Payload>
+            <StatusCode>405</StatusCode>
+            <ReasonPhrase>Requested path is Invalid</ReasonPhrase>
+        </Set>
+    </FaultResponse>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

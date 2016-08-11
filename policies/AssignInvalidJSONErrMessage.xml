@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignInvalidJSONErrMessage">
+  
+    <Set>
+        <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+            {
+              "code": 400,
+          "message": "Payload is expected in JSON/XML format",
+              "date": "@system.time.year#-@system.time.month#-@system.time.day# @system.time.hour#:@system.time.minute#:@system.time.second#"
+            }
+        </Payload>
+        <StatusCode>400</StatusCode>
+        <ReasonPhrase>Bad Request</ReasonPhrase>
+    </Set>
+     <AssignVariable>
+      	<Name>errorHandled</Name>
+      	<Value>true</Value>
+  	</AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <!--
+    <AssignTo createNew="false" transport="http" type="response"/>
+-->
+</AssignMessage>

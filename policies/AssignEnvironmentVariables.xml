@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="AssignEnvironmentVariables" mapIdentifier="TemplateTest">
+    <Scope>environment</Scope>
+    <Get assignTo="listitems.targetpath" index="1">
+        <Key>
+            <Parameter>listItemTargetPath</Parameter>
+        </Key>
+    </Get>
+    <Get assignTo="itemById.targetpath" index="1">
+        <Key>
+            <Parameter>itemByIdTargetPath</Parameter>
+        </Key>
+    </Get>
+</KeyValueMapOperations>

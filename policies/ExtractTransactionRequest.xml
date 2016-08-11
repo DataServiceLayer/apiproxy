@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="ExtractTransactionRequest">
+    <VariablePrefix>transactionrequest</VariablePrefix>
+    <JSONPayload>
+        <Variable name="packetOperation">
+            <JSONPath>$.test</JSONPath>
+        </Variable>
+        <Variable name="itemid" type="string">
+            <JSONPath>$.itemid</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source clearPayload="false">request</Source>
+</ExtractVariables>

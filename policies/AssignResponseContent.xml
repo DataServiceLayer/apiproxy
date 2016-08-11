@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignResponseContent">
+<!--
+This policy is used to display the response content in the trace.  
+The new variable resContent is not used anywhere else.
+-->
+
+    <AssignVariable>
+        <Name>resContent</Name>
+      <Ref>response.content</Ref>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

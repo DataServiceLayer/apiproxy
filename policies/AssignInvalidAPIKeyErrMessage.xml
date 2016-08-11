@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignInvalidAPIKeyErrMessage">
+    <Set>
+    	<Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+          {
+        	"code": 401,
+            "message": "Invalid API key",
+            "date": "@system.time.year#-@system.time.month#-@system.time.day# @system.time.hour#:@system.time.minute#:@system.time.second#"
+          }
+    	</Payload>
+        <StatusCode>401</StatusCode>
+        <ReasonPhrase>Unauthorized</ReasonPhrase>
+    </Set>
+    <AssignVariable>
+      	<Name>errorHandled</Name>
+      	<Value>true</Value>
+  	</AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

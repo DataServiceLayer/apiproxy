@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignRequestPayload">
+
+    <Set>
+        <Headers>
+          <Header name="content-type">application/json</Header>
+          <Header name="accept">application/json</Header>
+        </Headers>
+   		<Payload>{req.payload}</Payload>
+    </Set>
+
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

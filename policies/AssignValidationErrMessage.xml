@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignValidationErrMessage">
+	<Remove>
+        <Headers>
+            <Header name="status"/>
+            <Header name="statuscode"/>
+        </Headers>
+    </Remove>  
+  	<Add>
+      <Headers>
+            <Header name="status">422</Header>
+            <Header name="statuscode">422</Header>
+          <Header name="status-code">422</Header>
+        
+        </Headers>
+  	</Add>
+    <Set>
+      	
+    	<Payload contentType="application/json" variablePrefix="@" variableSuffix="#">
+          {
+        	"code": 422,
+            "message": "@payloadvalidation.message#",
+            "date": "@system.time.year#-@system.time.month#-@system.time.day# @system.time.hour#:@system.time.minute#:@system.time.second#"
+          }
+    	</Payload>
+        <StatusCode>422</StatusCode>
+        <ReasonPhrase>Unprocessed Entity</ReasonPhrase>
+    </Set>
+    <AssignVariable>
+      	<Name>errorHandled</Name>
+      	<Value>true</Value>
+  	</AssignVariable>
+  	<AssignVariable>
+        <Name>status.code</Name>
+        <Value>422</Value>
+    </AssignVariable>
+
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <!--
+    <AssignTo createNew="false" transport="http" type="request"/>
+-->
+  <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

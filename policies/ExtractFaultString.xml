@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="ExtractFaultString">
+ 
+    <JSONPayload>
+        <Variable name="faultString">
+            <JSONPath>$.fault.faultstring</JSONPath>
+        </Variable>
+    </JSONPayload>
+    
+    <VariablePrefix>errorString</VariablePrefix>
+
+</ExtractVariables>

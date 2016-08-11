@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <FaultRules>
+        <FaultRule name="invalid_key_rule">
+            <Step>
+                <Name>AssignInvalidAPIKeyErrMessage</Name>
+            </Step>
+            <Condition>(verifyapikey.VerifyAPIKeyQuery.failed = true)</Condition>
+        </FaultRule>
+        <FaultRule name="invalid_json_rule">
+            <Step>
+                <Name>AssignInvalidRequestErrMessage</Name>
+            </Step>
+            <Condition>(messagevalidation.RequestValidator.failed = true)</Condition>
+        </FaultRule>
+        <FaultRule name="spike_arrest_rule">
+            <Step>
+                <Name>AssignSpikeArrestMessage</Name>
+            </Step>
+            <Condition>(ratelimit.SpikeArrest.failed = true)</Condition>
+        </FaultRule>
+        <FaultRule name="json_threat_protection_rule">
+            <Step>
+                <Name>ExtractFaultString</Name>
+            </Step>
+            <Step>
+                <Name>AssignJSONThreatErrMessage</Name>
+            </Step>
+            <Condition>(jsonattack.JSONThreatProtection.failed = true)</Condition>
+        </FaultRule>
+        <FaultRule name="validation_rule">
+            <Step>
+                <Name>AssignValidationErrMessage</Name>
+            </Step>
+            <Condition>(payloadvalidation.valid = false)</Condition>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="fault-rule">
+        <Step>
+            <Name>AssignErrContent</Name>
+            <Condition>(error.state != null)</Condition>
+        </Step>
+        <AlwaysEnforce>true</AlwaysEnforce>
+    </DefaultFaultRule>
+    <PostClientFlow>
+        <Response>
+            <Step>
+                <Name>MsgLogErr</Name>
+                <Condition>(error.state != null)</Condition>
+            </Step>
+        </Response>
+    </PostClientFlow>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <FaultRules/>
+                <Name>VerifyAPIKeyQuery</Name>
+            </Step>
+            <Step>
+                <Name>SpikeArrest</Name>
+            </Step>
+            <Step>
+                <FaultRules/>
+                <Name>RequestVerbFault</Name>
+                <Condition>(request.verb != "POST" and request.verb != "GET")</Condition>
+            </Step>
+            <Step>
+                <FaultRules/>
+                <Name>AssignRequestContent</Name>
+            </Step>
+            <Step>
+                <FaultRules/>
+                <Name>AssignDeveloperName</Name>
+            </Step>
+            <Step>
+                <FaultRules/>
+                <Name>RequestValidator</Name>
+            </Step>
+            <Step>
+                <FaultRules/>
+                <Name>JSONThreatProtection</Name>
+                <Condition>reqcontenttype == "application/json"</Condition>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <Flows>
+        <Flow name="parts">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/part&quot;) and (request.verb = &quot;GET&quot;)</Condition>
+        </Flow>
+        <Flow name="partscsv">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/part&quot;) and (request.verb = &quot;POST&quot;)</Condition>
+        </Flow>
+        <Flow name="bom">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/bom&quot;) and (request.verb = &quot;GET&quot;)</Condition>
+        </Flow>
+        <Flow name="bomcsv">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/bom&quot;) and (request.verb = &quot;POST&quot;)</Condition>
+        </Flow>
+        <Flow name="ErrorFlow">
+            <Description/>
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>RaiseFaultGeneric</Name>
+                </Step>
+            </Request>
+            <Response/>
+        </Flow>
+    </Flows>
+    <HTTPProxyConnection>
+        <BasePath>/jcibe/v1/controlsplm</BasePath>
+        <VirtualHost>default</VirtualHost>
+        <!--
+        <VirtualHost>SSLVHost</VirtualHost>
+        -->
+    </HTTPProxyConnection>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+</ProxyEndpoint>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AssignErrContent">
+<!--
+This policy assigns the error response content to a variable.   
+Message Logging policy is not picking the response/error content directly from the apigee variable error.content.  
+Hence this policy helps to transfer the data from the response.content to a variable.  
+Then the variable will be used in the Message Logging policy to log the response content.
+-->
+    <AssignVariable>
+        <Name>errorContent</Name>
+      <Ref>error.content</Ref>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

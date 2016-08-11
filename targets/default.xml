@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="default">
+    <FaultRules>
+        <FaultRule name="validation_rule">
+            <Step>
+                <Name>AssignValidationErrMessage</Name>
+            </Step>
+            <Condition>(payloadvalidation.valid = false)</Condition>
+        </FaultRule>
+    </FaultRules>
+    <DefaultFaultRule name="fault-rule">
+        <Step>
+            <Name>AssignGenericErrorMessage</Name>
+            <Condition>(errorHandled != true)</Condition>
+        </Step>
+        <AlwaysEnforce>true</AlwaysEnforce>
+    </DefaultFaultRule>
+    <Flows>
+        <Flow name="parts">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/part&quot;) and (request.verb = &quot;GET&quot;)</Condition>
+        </Flow>
+        <Flow name="partscsv">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/part&quot;) and (request.verb = &quot;POST&quot;)</Condition>
+        </Flow>
+        <Flow name="bom">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/bom&quot;) and (request.verb = &quot;GET&quot;)</Condition>
+        </Flow>
+        <Flow name="bomcsv">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath &quot;/bom&quot;) and (request.verb = &quot;POST&quot;)</Condition>
+        </Flow>
+    </Flows>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <FaultRules/>
+                <Name>AssignEnvironmentVariables</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response>
+            <Step>
+                <FaultRules/>
+                <Name>AssignTargetResponseContent</Name>
+            </Step>
+        </Response>
+    </PostFlow>
+    <ScriptTarget>
+        <Arguments/>
+        <EnvironmentVariables/>
+        <ResourceURL>node://server.js</ResourceURL>
+        <Properties/>
+    </ScriptTarget>
+</TargetEndpoint>

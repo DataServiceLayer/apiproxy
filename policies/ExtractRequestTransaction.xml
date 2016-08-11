@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="ExtractRequestTransaction">
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  	<VariablePrefix>paymenttrans</VariablePrefix>    
+    <JSONPayload>
+      	<Variable name="packetOperation">
+            <JSONPath>$.packetOperation</JSONPath>
+        </Variable>
+        <Variable name="mid">
+            <JSONPath>$.mid</JSONPath>          
+        </Variable>
+      	<Variable name="cardType">
+            <JSONPath>$.cardType</JSONPath>          
+        </Variable>
+      	<Variable name="pan">
+            <JSONPath>$.pan</JSONPath>          
+        </Variable>
+      	<Variable name="panExpirationDate">
+            <JSONPath>$.panExpirationDate</JSONPath>          
+        </Variable>
+      	<Variable name="authorizationAmount">
+            <JSONPath>$.authorizationAmount</JSONPath>          
+        </Variable>
+      	<Variable name="currencyKey">
+            <JSONPath>$.currencyKey</JSONPath>          
+        </Variable>
+      	<Variable name="cardDataSource">
+            <JSONPath>$.cardDataSource</JSONPath>          
+        </Variable>      
+      	<Variable name="customerNumber">
+            <JSONPath>$.customerNumber</JSONPath>          
+        </Variable>
+      	<Variable name="orderNumber">
+            <JSONPath>$.orderNumber</JSONPath>          
+        </Variable>
+      	<Variable name="preAuthorized">
+            <JSONPath>$.preAuthorized</JSONPath>          
+        </Variable>
+      	<Variable name="source">
+            <JSONPath>$.source</JSONPath>          
+        </Variable>      
+      	<Variable name="invoiceNumber">
+            <JSONPath>$.invoiceNumber</JSONPath>          
+        </Variable>      
+      	<Variable name="invoiceAmount">
+            <JSONPath>$.invoiceAmount</JSONPath>          
+        </Variable>
+    	
+    </JSONPayload>
+    <Source clearPayload="false">request</Source>    
+</ExtractVariables>
