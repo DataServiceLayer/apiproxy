@@ -1,24 +1,23 @@
 var http = require('http');
-var jdbc = require('trireme-jdbc');
+var jdbc = require('C:/Program Files/nodejs/node_modules/npm/node_modules/trireme-jdbc');
 var loggy = require('./logger/logger.js')();
 var mapper = require('./mapper/controlsPLMMapper.js');
 
-var db = new jdbc.Database({
-  url: 'jdbc:datadirect:openedge://c217u083.cg.na.jci.com:50963;DatabaseName=symix',
-  properties: {
-    user: 'E2Open',
-    password: 'nepO2E01',
-  },
-  minConnections: 1,
-  maxConnections: 20,
-  idleTimeout: 100
-});
-
+	var db = new jdbc.Database({
+		  url: 'jdbc:datadirect:openedge://c217u083.cg.na.jci.com:50963;DatabaseName=symix',
+		  properties: {
+			user: 'E2Open',
+			password: 'nepO2E01',
+		  },
+		  minConnections: 1,
+		  maxConnections: 20,
+		  idleTimeout: 100
+	});
 
 exports.getBom = function(erpName, region, plantCode, bomNumber, envConfiguration){
-
 	loggy.info('BOM Object Fetching Begins');
 	loggy.debug('BOM Object Fetching for bom: '+bomNumber);
+	
 
 	db.execute('SELECT job, item FROM jobmatl where job = ?',[bomNumber],
 			  function(err,result,  rows) {
@@ -46,14 +45,12 @@ exports.postBom = function(bomObject, envConfiguration){
 
 	var errorObject= {};
 	var results = {error:[],success:[]};
-	var uri = util.createHeaderURI(envConfiguration, order);
 	var timeoutLimit = envConfiguration.lawsonServiceTimeOut;
-  
-	loggy.debug('Part Request Header URI:' + uri);
+	var bomNumber = bomObject.job;
 
 	var options = {
 		  host: '10.109.218.234',
-		  path: '/bom?bomObj='+encodeURIComponent(objArrStr),
+		  path: '/bom?bomObj='+encodeURIComponent(bomObject),
 		  port: '8080',
 		  method: 'POST',
 		  headers: {
@@ -74,7 +71,6 @@ var request = http.request(options, function(res) {
 
 				if(res.statusCode == 200){
 							loggy.info('BOM Object Http Request is Successfull for bom: ' + bomNumber);
-							loggy.debug('Success Message: ' + JSON.stringify(mapper.bomHeaderMapper(result)));
 							loggy.debug('BOM Object Http Request Ends for bom: ' + bomNumber);
 							
 							//acknowledgement temporary code
@@ -104,8 +100,6 @@ var request = http.request(options, function(res) {
 							reqack.end();
 				
 							
-							
-					 		results.success.push(mapper.bomHeaderMapper(result))	
 						return callback();
 				}
 				else{
@@ -117,7 +111,6 @@ var request = http.request(options, function(res) {
                 	}; 
 
                 	loggy.error('BOM Object Http Request Error for bom: ' + bomNumber);
-					loggy.error('Error Message: ' + JSON.stringify(mapper.bomHeaderMapper(result)));
 					loggy.debug('BOM Object Http Request Ends for bom: ' + bomNumber);
 
 

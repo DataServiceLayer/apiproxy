@@ -1,17 +1,17 @@
 var http = require('http');
-var express = require('express');
-var bodyParser = require('body-parser');
-var logger = require('morgan');
-var dateFormat = require('dateformat');
-var async = require('async');
-var apigee = require('apigee-access');
-var jdbc = require("node-jdbc");            
+var express = require('C:/Program Files/nodejs/node_modules/npm/node_modules/express');
+var bodyParser = require('C:/Program Files/nodejs/node_modules/npm/node_modules/body-parser');
+var logger = require('C:/Program Files/nodejs/node_modules/npm/node_modules/morgan');
+var dateFormat = require('C:/Program Files/nodejs/node_modules/npm/node_modules/dateformat');
+var async = require('C:/Program Files/nodejs/node_modules/npm/node_modules/async');
+//var apigee = require('C:/Program Files/nodejs/node_modules/npm/node_modules/apigee-access');
+//var jdbc = require("C:/Program Files/nodejs/node_modules/npm/node_modules/node-jdbc");            
 
 //use custom libraries for common operations
 var loggy = require('./js/service/logger/logger.js')();
 var EnvironmentConf = require("./js/service/lib/environmentConf.js");
 var requestBodyValidation = require('./js/service/validate/validateRequestBody.js');
-var createOrder = require('./js/createOrder.js');
+var createOrder = require('./js/createRequest.js');
 var part = require('./js/service/part.js');
 var bom = require('./js/service/bom.js');
 
@@ -22,7 +22,7 @@ var app = express();
 app.use(logger('combined'));
 app.use(bodyParser.json());
 
-var envConfiguration = new EnvironmentConf(req);
+//var envConfiguration = new EnvironmentConf(req);
 loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
 
 app.use(function(error, req, res, next) {
@@ -82,9 +82,10 @@ app.route('/part')
       		loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
       
 			loggy.debug('Get Part - starts');
-			var partResponse = part.getParts('erpName1','U.S','Plant101', '01-10-239', envConfiguration);
+			var partResponse = part.getParts('erpName1','U.S','Plant101', '01-10-239', envConfiguration, function(resp){
+				
+			});
 			loggy.debug('Get Part - ends');
-			
 			res.send("Part Object response");
 	}) 
 
@@ -101,9 +102,10 @@ app.route('/part')
       		loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
 			loggy.debug('Post Part - starts');
 			var partObj = {item:'02-10-119', description:'sample item description'};
-			var partResponse = part.postParts(partObj, envConfiguration);
+			var partResponse = part.postParts(partObj, envConfiguration, function(resp){
+				
+			});
 			loggy.debug('Post Part - ends');
-
 			res.send("Part request response");
 	}) 
 
@@ -119,9 +121,10 @@ app.route('/bom')
 		 	var envConfiguration = new EnvironmentConf(req);
       		loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
 			loggy.debug('Get BOM - starts');
-			var bomResponse = bom.getBom('erpName1','U.S','Plant101', '2', envConfiguration);
+			var bomResponse = bom.getBom('erpName1','U.S','Plant101', '2', envConfiguration, function(resp){
+				
+			});
 			loggy.debug('Get BOM - ends');
-
 			res.send("BOM Object response");
 	}) 
 
@@ -139,10 +142,12 @@ app.route('/bom')
       		loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
 			loggy.debug('Post BOM - starts');
 			var bomObj = {item:'02-10-119', job:'11'};
-			var bomResponse = bom.postBom(bomObj, envConfiguration);
+			var bomResponse = bom.postBom(bomObj, envConfiguration, function(resp){
+				
+			});
 			loggy.debug('Post BOM - ends');
-
 			res.send("BOM Request response");
+			
 	}) 
 
 

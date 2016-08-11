@@ -1,9 +1,9 @@
-var async = require('async');
-var dateFormat = require('dateformat');
+var async = require('C:/Program Files/nodejs/node_modules/npm/node_modules/async');
+var dateFormat = require('C:/Program Files/nodejs/node_modules/npm/node_modules/dateformat');
 var loggy = require('./service/logger/logger.js')();
 
 var requestBodyMapper = require('./service/validate/mapRequestBody.js');
-var parts = require('./service/parts.js');
+var parts = require('./service/part.js');
 var bom = require('./service/bom.js');
 var mapper = require('./service/mapper/controlsPLMMapper.js');
 

@@ -1,25 +1,30 @@
 var http = require('http');
-var jdbc = require('trireme-jdbc');
+var jdbc = require('C:/Program Files/nodejs/node_modules/npm/node_modules/trireme-jdbc');
 var loggy = require('./logger/logger.js')();
 var mapper = require('./mapper/controlsPLMMapper.js');
 
-var db = new jdbc.Database({
-  url: 'jdbc:datadirect:openedge://c217u083.cg.na.jci.com:50963;DatabaseName=symix',
-  properties: {
-    user: 'E2Open',
-    password: 'nepO2E01',
-  },
-  minConnections: 1,
-  maxConnections: 20,
-  idleTimeout: 100
-});
+
+	var db = new jdbc.Database({
+		  url: 'jdbc:datadirect:openedge://c217u083.cg.na.jci.com:50963;DatabaseName=symix',
+		  properties: {
+			user: 'E2Open',
+			password: 'nepO2E01',
+		  },
+		  minConnections: 1,
+		  maxConnections: 20,
+		  idleTimeout: 100
+	});
 
 
 exports.getParts = function(erpName, region, plantCode, itemNumber, envConfiguration){
 
+
 	loggy.info('Part Object Fetching Begins');
 	loggy.debug('Part Object Fetching for part: '+itemNumber);
 
+
+	
+	
 	db.execute('SELECT item, description FROM item where item = ?',[itemNumber],
 			  function(err,result,  rows) {
 					if(err == undefined){
@@ -27,10 +32,13 @@ exports.getParts = function(erpName, region, plantCode, itemNumber, envConfigura
 						  console.log('Row: %j', row);
 						  loggy.debug('Part Object Fetching is Successfull for part: '+itemNumber);
 						  loggy.info('Part Object Fetching Ends');
+						  return row;
 						});
 					}else{
 						loggy.debug('Part Object Fetching Error for part: '+itemNumber);
+						loggy.error('Part Object Error: '+err);
 						loggy.info('Part Object Fetching Ends');
+						return "";
 					}
 				}
 	);
@@ -47,14 +55,14 @@ exports.postParts = function(itemObject, envConfiguration){
 
 	var errorObject= {};
 	var results = {error:[],success:[]};
-	var uri = util.createHeaderURI(envConfiguration, order);
+	//var uri = util.createHeaderURI(envConfiguration, order);
 	var timeoutLimit = envConfiguration.lawsonServiceTimeOut;
   
-	loggy.debug('Part Request Header URI:' + uri);
+	//loggy.debug('Part Request Header URI:' + uri);
 
 	var options = {
 		  host: '10.109.218.234',
-		  path: '/part?partObj='+encodeURIComponent(objArrStr),
+		  path: '/part?partObj='+encodeURIComponent(itemObject),
 		  port: '8080',
 		  method: 'POST',
 		  headers: {
@@ -63,6 +71,7 @@ exports.postParts = function(itemObject, envConfiguration){
 	};
 
 var request = http.request(options, function(res) {
+			var itemNumber = itemObject.item;
 			var response='';
 			res.setEncoding('utf8');
 			res.on('data', function(chunk) {
@@ -75,7 +84,6 @@ var request = http.request(options, function(res) {
 
 				if(res.statusCode == 200){
 							loggy.info('Part Object Http Request is Successfull for part: ' + itemNumber);
-							loggy.debug('Success Message: ' + JSON.stringify(mapper.partsHeaderMapper(result)));
 							loggy.debug('Part Object Http Request Ends for part: ' + itemNumber);
 							
 							//acknowledgement temporary code
@@ -104,8 +112,6 @@ var request = http.request(options, function(res) {
 							});
 							reqack.end();
 				
-							
-					 		results.success.push(mapper.partsHeaderMapper(result));	
 							return callback();
 				}
 				else{
@@ -117,11 +123,8 @@ var request = http.request(options, function(res) {
                 	}; 
 
                 	loggy.error('Part Object Http Request Error for part: ' + itemNumber);
-					loggy.error('Error Message: ' + JSON.stringify(mapper.partsHeaderMapper(result)));
 					loggy.debug('Part Object Http Request Ends for part: ' + itemNumber);
 
-
-                	results.error.push(errorMessageRet);
                 	return callback();
 				}	
 			});

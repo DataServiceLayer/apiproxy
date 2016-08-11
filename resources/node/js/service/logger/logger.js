@@ -1,4 +1,4 @@
-var winston = require('winston');
+var winston = require('C:/Program Files/nodejs/node_modules/npm/node_modules/winston');
 winston.emitErrs = true;
 
 var logLevel = 'info';

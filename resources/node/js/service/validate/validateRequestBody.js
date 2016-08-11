@@ -1,5 +1,5 @@
 var fs = require('fs');
-var Validator = require('jsonschema').Validator;
+var Validator = require('C:/Program Files/nodejs/node_modules/npm/node_modules/jsonschema').Validator;
 var loggy = require('../logger/logger.js')();
 
 var orderingERP = {values:['LAWSON-BE','MAPICS-RFG']};

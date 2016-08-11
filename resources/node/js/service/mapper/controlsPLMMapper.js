@@ -1,4 +1,4 @@
-var dateFormat = require('dateformat');
+var dateFormat = require('C:/Program Files/nodejs/node_modules/npm/node_modules/dateformat');
 var loggy = require('../logger/logger.js')();
 
 exports.partsHeaderMapper = function(data){
