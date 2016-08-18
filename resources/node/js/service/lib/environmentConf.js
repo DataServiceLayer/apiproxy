@@ -11,7 +11,7 @@ function EnvironmentConf(request){
 	this.hostMapics = apigee.getVariable(request,'hostValueMapics');
 	this.pathCreateOrderMapics = apigee.getVariable(request,'pathCreateOrderValueMapics');
 	this.envType = 	apigee.getMode();
-    this.lawsonServiceTimeOut = apigee.getVariable(request,'lawsonServiceTimeOut');
+    this.lawsonServiceTimeOut = apigee.getVariable(request, 'lawsonServiceTimeOut');
 	this.mapicsServiceTimeOut = apigee.getVariable(request,'mapicsServiceTimeOut');
   	this.logLevel = apigee.getVariable(request,'logLevel');
 }

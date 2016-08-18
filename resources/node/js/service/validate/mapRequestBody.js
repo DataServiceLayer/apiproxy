@@ -1,8 +1,10 @@
 var loggy = require('../logger/logger.js')();
 
-exports.changeRequestBodyValues = function(requestBody){
+
+// Request body for part and bom
+exports.changeRequestBodyValues = function(requestBody, type){
 	
-	loggy.debug('changeRequestBodyValues starts');
+	loggy.debug('changeRequestBodyValues starts for '+type);
 	
 	var changedRequestBody = '';
 	if(requestBody.orderingERP == 'LAWSON-BE'){
@@ -13,7 +15,7 @@ exports.changeRequestBodyValues = function(requestBody){
 	}
 
 	loggy.debug('changed request body: ' + JSON.stringify(changedRequestBody));
-	loggy.debug('changeRequestBodyValues ends');
+	loggy.debug('changeRequestBodyValues ends for '+type);
 	
 	return changedRequestBody;
 }

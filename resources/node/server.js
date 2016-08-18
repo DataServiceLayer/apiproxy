@@ -80,12 +80,14 @@ app.route('/part')
 
 		 	var envConfiguration = new EnvironmentConf(req);
       		loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
-      
-			loggy.debug('Get Part - starts');
-			var partResponse = part.getParts('erpName1','U.S','Plant101', '01-10-239', envConfiguration, function(resp){
-				
+			loggy.info('Get Part Request Begins');
+			loggy.debug('Get Part Request - Starts');
+			
+			var partResponse = part.getParts('SYMIX','ASIA','RY1', '01-10-239', envConfiguration, function(resp){
+				loggy.debug('response code: '+resp.errorCode+' response message:'+resp.errorMessage);
+				loggy.info('Get Part Request Ends');
+				loggy.debug('Get Part Request - Ends');
 			});
-			loggy.debug('Get Part - ends');
 			res.send("Part Object response");
 	}) 
 
@@ -97,16 +99,48 @@ app.listen(port, function(){
 app.route('/part')
 
 	.post(function(req,res){
+		
+		var partArray = [{
+					object_id: "OR:wt.part.WTPart:117313:425251666-1466176866678-1329564238-1-0-0-127@tibco.ptc.com",
+					className: "com.ptc.windchill.esi.Part",
+					last_changed_by: "Administrator",
+					number: "0000000032",
+					start_effectivity: undefined,
+					end_effectivity: undefined,
+					start_serialnumber_effectivity: undefined,
+					end_serialnumber_effectivity: undefined,
+					start_lotnumber_effectivity: undefined,
+					end_lotnumber_effectivity: undefined,
+					serialnumber_effectivity_cxtpartnumber: undefined,
+					lotnumber_effectivity_cxtpartnumber: undefined,
+					default_unit: "ea",
+					name: "test16",
+					part_type: "separable",
+					source: "make",
+					state: "INWORK",
+					is_phantom: false,
+					version: "A",
+					iteration: 1,
+					previous_version: "",
+					is_configurable: "standard",
+					is_collapsible: false,
+					target_id: 1
+			}];
 
-		 	var envConfiguration = new EnvironmentConf(req);
-      		loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
-			loggy.debug('Post Part - starts');
-			var partObj = {item:'02-10-119', description:'sample item description'};
-			var partResponse = part.postParts(partObj, envConfiguration, function(resp){
+		 	
+			
+			if(validationCheck(partArray,res, 'PART')){
+				var envConfiguration = new EnvironmentConf(req);
+				loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
+				loggy.debug('Post Part - starts');
 				
-			});
-			loggy.debug('Post Part - ends');
-			res.send("Part request response");
+				var partResponse = part.postParts(partArray, envConfiguration, function(resp){
+					
+				});
+				loggy.debug('Post Part - ends');
+				res.send("Part request response");
+			}
+			
 	}) 
 
 
@@ -121,7 +155,7 @@ app.route('/bom')
 		 	var envConfiguration = new EnvironmentConf(req);
       		loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
 			loggy.debug('Get BOM - starts');
-			var bomResponse = bom.getBom('erpName1','U.S','Plant101', '2', envConfiguration, function(resp){
+			var bomResponse = bom.getBom('SYMIX','ASIA','Plant101', '2', envConfiguration, function(resp){
 				
 			});
 			loggy.debug('Get BOM - ends');
@@ -137,16 +171,44 @@ app.listen(port, function(){
 app.route('/bom')
 
 	.post(function(req,res){
-
-		 	var envConfiguration = new EnvironmentConf(req);
-      		loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
-			loggy.debug('Post BOM - starts');
-			var bomObj = {item:'02-10-119', job:'11'};
-			var bomResponse = bom.postBom(bomObj, envConfiguration, function(resp){
-				
-			});
-			loggy.debug('Post BOM - ends');
-			res.send("BOM Request response");
+			
+			var bomArray = [{
+								object_id: "OR:wt.part.WTPart:401060641:104375456-1153348282062-33238777-27-83-253-132@icenterv01.ptc.com",
+								className: "com.ptc.windchill.esi.Part",
+								last_changed_by: "Administrator",
+								number: "0000030158",
+								start_effectivity: undefined,
+								end_effectivity: undefined,
+								start_serialnumber_effectivity: undefined,
+								end_serialnumber_effectivity: undefined,
+								start_lotnumber_effectivity: undefined,
+								end_lotnumber_effectivity: undefined,
+								serialnumber_effectivity_cxtpartnumber: "",
+								lotnumber_effectivity_cxtpartnumber: "",
+								default_unit: "ea",
+								name: "Configured Product 2000",
+								part_type: "separable",
+								source: "make",
+								state: "RELEASED",
+								is_phantom: false,
+								version: "B",
+								iteration: 2,
+								previous_version: "A",
+								is_configurable: undefined,
+								is_collapsible: false,
+								target_id: 7
+			}];
+			
+			if(validationCheck(bomArray, res, 'BOM')){
+				var envConfiguration = new EnvironmentConf(req);
+				loggy.transports.console.level = "debug";//genvConfiguration.logLevel;
+				loggy.debug('Post BOM - starts');
+				var bomResponse = bom.postBom(bomArray, envConfiguration, function(resp){
+					
+				});
+				loggy.debug('Post BOM - ends');
+				res.send("BOM Request response");
+			}
 			
 	}) 
 
@@ -225,21 +287,25 @@ app.use(function(err, req, res, next) {
 });
 
 
-validationCheck = function(body,res){
-	var validationResult = requestBodyValidation.validateRequestBody(body);
+validationCheck = function(body,res,type){
+	loggy.debug("Validation check for input json begins.");
+	var validationResult = (type == 'PART') ? requestBodyValidation.validatePartRequestBody(body) : requestBodyValidation.validateBOMRequestBody(body);
 	if(validationResult.length > 0){
 		
 		loggy.error('validation error: ' + JSON.stringify(validationResult));
 		
 		var result = {
-			code: 422,//validation error 
+			code: 423,//validation error 
 			message: validationResult,
 			date: getCurrentDateTime()
 		}
-		res.status(422);
+		res.status(423);
 		res.send(result);
+		loggy.debug("Invalid json: "+ JSON.stringify(result));
+		loggy.debug("Validation check for input json ends.");
 		return false;
 	}
+	loggy.debug("Validation check for input json ends.");
 	return true;
 }
 
