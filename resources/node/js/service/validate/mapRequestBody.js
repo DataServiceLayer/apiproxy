@@ -1,116 +1,91 @@
 var loggy = require('../logger/logger.js')();
 
 
-// Request body for part and bom
-exports.changeRequestBodyValues = function(requestBody, type){
+// Request body for part
+exports.changePartValues = function(requestBody){
 	
-	loggy.debug('changeRequestBodyValues starts for '+type);
-	
-	var changedRequestBody = '';
-	if(requestBody.orderingERP == 'LAWSON-BE'){
-		changedRequestBody = changeForLawson(requestBody);
+	loggy.debug('changePartValues starts');
+	var requestJSON = [];
+	try{
+		requestJSON = (requestBody != undefined) ? requestBody :[{}];
+		for(var i=0;i<requestJSON.length;i++){
+			requestJSON[i].object_id = (requestJSON[i].object_id == null) ? undefined : requestJSON[i].object_id;
+			requestJSON[i].className = (requestJSON[i].className == null) ? undefined : requestJSON[i].className;
+			requestJSON[i].last_changed_by = (requestJSON[i].last_changed_by == null) ? undefined : requestJSON[i].last_changed_by;
+			requestJSON[i].number = (requestJSON[i].number == null) ? undefined : requestJSON[i].number;
+			requestJSON[i].start_effectivity = (requestJSON[i].start_effectivity == null) ? undefined : requestJSON[i].start_effectivity;
+			requestJSON[i].end_effectivity = (requestJSON[i].end_effectivity == null) ? undefined : requestJSON[i].end_effectivity;
+			requestJSON[i].start_serialnumber_effectivity = (requestJSON[i].start_serialnumber_effectivity == null) ? undefined : requestJSON[i].start_serialnumber_effectivity;
+			requestJSON[i].end_serialnumber_effectivity = (requestJSON[i].end_serialnumber_effectivity == null) ? undefined : requestJSON[i].end_serialnumber_effectivity;
+			requestJSON[i].start_lotnumber_effectivity = (requestJSON[i].start_lotnumber_effectivity == null) ? undefined : requestJSON[i].start_lotnumber_effectivity;
+			requestJSON[i].end_lotnumber_effectivity = (requestJSON[i].end_lotnumber_effectivity == null) ? undefined : requestJSON[i].end_lotnumber_effectivity;
+			requestJSON[i].serialnumber_effectivity_cxtpartnumber = (requestJSON[i].serialnumber_effectivity_cxtpartnumber == null) ? undefined : requestJSON[i].serialnumber_effectivity_cxtpartnumber;
+			requestJSON[i].lotnumber_effectivity_cxtpartnumber = (requestJSON[i].lotnumber_effectivity_cxtpartnumber == null) ? undefined : requestJSON[i].lotnumber_effectivity_cxtpartnumber;
+			requestJSON[i].default_unit = (requestJSON[i].default_unit == null) ? undefined : requestJSON[i].default_unit;
+			requestJSON[i].name = (requestJSON[i].name == null) ? undefined : requestJSON[i].name;
+			requestJSON[i].part_type = (requestJSON[i].part_type == null) ? undefined : requestJSON[i].part_type;
+			requestJSON[i].source = (requestJSON[i].source == null) ? undefined : requestJSON[i].source;
+			requestJSON[i].state = (requestJSON[i].state == null) ? undefined : requestJSON[i].state;
+			requestJSON[i].is_phantom = (requestJSON[i].is_phantom == null) ? undefined : requestJSON[i].is_phantom;
+			requestJSON[i].version = (requestJSON[i].version == null) ? undefined : requestJSON[i].version;
+			requestJSON[i].iteration = (requestJSON[i].iteration == null) ? undefined : requestJSON[i].iteration;
+			requestJSON[i].previous_version = (requestJSON[i].previous_version == null) ? undefined : requestJSON[i].previous_version;
+			requestJSON[i].is_configurable = (requestJSON[i].is_configurable == null) ? undefined : requestJSON[i].is_configurable;
+			requestJSON[i].is_collapsible = (requestJSON[i].is_collapsible == null) ? undefined : requestJSON[i].is_collapsible;
+			requestJSON[i].target_id = (requestJSON[i].target_id == null) ? undefined : requestJSON[i].target_id;
+		}
+	}catch(err){
+		loggy.info('Error in converting changePartValues');
+		loggy.error('changePartValues json requestBody error: '+err);
 	}
-	else if(requestBody.orderingERP == 'MAPICS-RFG'){
-		changedRequestBody = changeForMapics(requestBody); 
-	}
-
-	loggy.debug('changed request body: ' + JSON.stringify(changedRequestBody));
-	loggy.debug('changeRequestBodyValues ends for '+type);
 	
-	return changedRequestBody;
+	loggy.debug('changed request body: ' + JSON.stringify(requestJSON));
+	loggy.debug('changePartValues ends');
+	
+	return requestJSON;
 }
 
-// Request Body changes for lawson;
-changeForLawson = function(requestBody){
+
+// Request body for BOM
+exports.changeBOMValues = function(requestBody){
 	
-	loggy.debug('changeForLawson starts');
-
-	var changedRequestBody = requestBody;
+	loggy.debug('changeBOMValues starts');
+	var requestJSON = [];
 	try{
-
-		loggy.debug('trying to change shipCompleteFlag value: ' + requestBody.shipCompleteFlag);
-
-		if(requestBody.shipCompleteFlag == '1'){
-			changedRequestBody.shipCompleteFlag = 'Y';
+		 requestJSON = (requestBody != undefined) ? requestBody :[{}];
+		for(var i=0;i<requestJSON.length;i++){
+			requestJSON[i].object_id = (requestJSON[i].object_id == null) ? undefined : requestJSON[i].object_id;
+			requestJSON[i].className = (requestJSON[i].className == null) ? undefined : requestJSON[i].className;
+			requestJSON[i].last_changed_by = (requestJSON[i].last_changed_by == null) ? undefined : requestJSON[i].last_changed_by;
+			requestJSON[i].number = (requestJSON[i].number == null) ? undefined : requestJSON[i].number;
+			requestJSON[i].start_effectivity = (requestJSON[i].start_effectivity == null) ? undefined : requestJSON[i].start_effectivity;
+			requestJSON[i].end_effectivity = (requestJSON[i].end_effectivity == null) ? undefined : requestJSON[i].end_effectivity;
+			requestJSON[i].start_serialnumber_effectivity = (requestJSON[i].start_serialnumber_effectivity == null) ? undefined : requestJSON[i].start_serialnumber_effectivity;
+			requestJSON[i].end_serialnumber_effectivity = (requestJSON[i].end_serialnumber_effectivity == null) ? undefined : requestJSON[i].end_serialnumber_effectivity;
+			requestJSON[i].start_lotnumber_effectivity = (requestJSON[i].start_lotnumber_effectivity == null) ? undefined : requestJSON[i].start_lotnumber_effectivity;
+			requestJSON[i].end_lotnumber_effectivity = (requestJSON[i].end_lotnumber_effectivity == null) ? undefined : requestJSON[i].end_lotnumber_effectivity;
+			requestJSON[i].serialnumber_effectivity_cxtpartnumber = (requestJSON[i].serialnumber_effectivity_cxtpartnumber == null) ? undefined : requestJSON[i].serialnumber_effectivity_cxtpartnumber;
+			requestJSON[i].lotnumber_effectivity_cxtpartnumber = (requestJSON[i].lotnumber_effectivity_cxtpartnumber == null) ? undefined : requestJSON[i].lotnumber_effectivity_cxtpartnumber;
+			requestJSON[i].default_unit = (requestJSON[i].default_unit == null) ? undefined : requestJSON[i].default_unit;
+			requestJSON[i].name = (requestJSON[i].name == null) ? undefined : requestJSON[i].name;
+			requestJSON[i].part_type = (requestJSON[i].part_type == null) ? undefined : requestJSON[i].part_type;
+			requestJSON[i].source = (requestJSON[i].source == null) ? undefined : requestJSON[i].source;
+			requestJSON[i].state = (requestJSON[i].state == null) ? undefined : requestJSON[i].state;
+			requestJSON[i].is_phantom = (requestJSON[i].is_phantom == null) ? undefined : requestJSON[i].is_phantom;
+			requestJSON[i].version = (requestJSON[i].version == null) ? undefined : requestJSON[i].version;
+			requestJSON[i].iteration = (requestJSON[i].iteration == null) ? undefined : requestJSON[i].iteration;
+			requestJSON[i].previous_version = (requestJSON[i].previous_version == null) ? undefined : requestJSON[i].previous_version;
+			requestJSON[i].is_configurable = (requestJSON[i].is_configurable == null) ? undefined : requestJSON[i].is_configurable;
+			requestJSON[i].is_collapsible = (requestJSON[i].is_collapsible == null) ? undefined : requestJSON[i].is_collapsible;
+			requestJSON[i].target_id = (requestJSON[i].target_id == null) ? undefined : requestJSON[i].target_id;
 		}
-		else{
-			changedRequestBody.shipCompleteFlag = '';
-		}
-	}catch(ex){
-		changedRequestBody.shipCompleteFlag = 'Y';
+	}catch(err){
+		loggy.info('Error in converting changeBOMValues');
+		loggy.error('changeBOMValues json requestBody error: '+err);
 	}
-
-	loggy.debug('changed shipCompleteFlag value: ' + requestBody.shipCompleteFlag);
-
-	try{
-
-		loggy.debug('trying to change priorityShipment value: ' + requestBody.priorityShipment);
-
-		if(requestBody.priorityShipment == '1'){
-			changedRequestBody.priorityShipment = 'P';
-		}
-		else{
-			changedRequestBody.priorityShipment = '';	
-		}
-
-	}catch(ex){
-		changedRequestBody.priorityShipment = '';
-	}
-
-	loggy.debug('changed priorityShipment value: ' + requestBody.priorityShipment);
-
-	//contactEmail
-	try{
-
-		loggy.debug('trying to change contactEmail value: ' + requestBody.contactEmail);
-
-		if(requestBody.contactEmail == ''){
-			changedRequestBody.contactEmail = 'NA';
-		}
-	}catch(ex){
-		changedRequestBody.contactEmail = 'NA';
-	}
-
-	loggy.debug('changed contactEmail value: ' + requestBody.contactEmail);
-
-	//contactPhone
-	try{
-
-		loggy.debug('trying to change contactPhone value: ' + requestBody.contactPhone);
-
-		if(requestBody.contactPhone == ''){
-			changedRequestBody.contactPhone = 'NA';
-		}
-	}catch(ex){
-		changedRequestBody.contactPhone = 'NA';
-	}
-
-	loggy.debug('changed contactPhone value: ' + requestBody.contactPhone);
-
-	try{
-
-		loggy.debug('trying to change contactName value: ' + requestBody.contactName);
-
-		if(requestBody.contactName == ''){
-			changedRequestBody.contactName = 'NA';
-		}
-
-	}catch(ex){
-		changedRequestBody.contactName = 'NA';
-	}
-
-	loggy.debug('changed contactName value: ' + requestBody.contactName);
-
-	return changedRequestBody;
-}
-
-changeForMapics = function(requestBody){
-
-	loggy.debug('changeForMapics starts');
 	
-	var changedRequestBody = requestBody;
-
-	loggy.debug('changeForMapics ends');
+	loggy.debug('changed request body: ' + JSON.stringify(requestJSON));
+	loggy.debug('changeBOMValues ends');
 	
-	return changedRequestBody;
+	return requestJSON;
 }

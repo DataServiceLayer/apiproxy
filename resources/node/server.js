@@ -10,6 +10,7 @@ var async = require('C:/Program Files/nodejs/node_modules/npm/node_modules/async
 //use custom libraries for common operations
 var loggy = require('./js/service/logger/logger.js')();
 var EnvironmentConf = require("./js/service/lib/environmentConf.js");
+var requestBodyMap = require('./js/service/validate/mapRequestBody.js');
 var requestBodyValidation = require('./js/service/validate/validateRequestBody.js');
 var createOrder = require('./js/createRequest.js');
 var part = require('./js/service/part.js');
@@ -105,14 +106,14 @@ app.route('/part')
 					className: "com.ptc.windchill.esi.Part",
 					last_changed_by: "Administrator",
 					number: "0000000032",
-					start_effectivity: undefined,
-					end_effectivity: undefined,
-					start_serialnumber_effectivity: undefined,
-					end_serialnumber_effectivity: undefined,
-					start_lotnumber_effectivity: undefined,
-					end_lotnumber_effectivity: undefined,
-					serialnumber_effectivity_cxtpartnumber: undefined,
-					lotnumber_effectivity_cxtpartnumber: undefined,
+					start_effectivity: null,
+					end_effectivity: null,
+					start_serialnumber_effectivity: null,
+					end_serialnumber_effectivity: null,
+					start_lotnumber_effectivity: null,
+					end_lotnumber_effectivity: null,
+					serialnumber_effectivity_cxtpartnumber: null,
+					lotnumber_effectivity_cxtpartnumber: null,
 					default_unit: "ea",
 					name: "test16",
 					part_type: "separable",
@@ -127,7 +128,8 @@ app.route('/part')
 					target_id: "RY1"
 			}];
 
-		 	
+		 	partArray = requestBodyMap.changePartValues(partArray);
+			console.log(partArray);
 			
 			if(validationCheck(partArray,res, 'PART')){
 				var envConfiguration = new EnvironmentConf(req);
@@ -177,12 +179,12 @@ app.route('/bom')
 								className: "com.ptc.windchill.esi.Part",
 								last_changed_by: "Administrator",
 								number: "0000030158",
-								start_effectivity: undefined,
-								end_effectivity: undefined,
-								start_serialnumber_effectivity: undefined,
-								end_serialnumber_effectivity: undefined,
-								start_lotnumber_effectivity: undefined,
-								end_lotnumber_effectivity: undefined,
+								start_effectivity: null,
+								end_effectivity: null,
+								start_serialnumber_effectivity: null,
+								end_serialnumber_effectivity: null,
+								start_lotnumber_effectivity: null,
+								end_lotnumber_effectivity: null,
 								serialnumber_effectivity_cxtpartnumber: "",
 								lotnumber_effectivity_cxtpartnumber: "",
 								default_unit: "ea",
@@ -194,10 +196,13 @@ app.route('/bom')
 								version: "B",
 								iteration: 2,
 								previous_version: "A",
-								is_configurable: undefined,
+								is_configurable: null,
 								is_collapsible: false,
 								target_id: "RY2"
 			}];
+			
+			bomArray = requestBodyMap.changePartValues(bomArray);
+			console.log(bomArray);
 			
 			if(validationCheck(bomArray, res, 'BOM')){
 				var envConfiguration = new EnvironmentConf(req);
