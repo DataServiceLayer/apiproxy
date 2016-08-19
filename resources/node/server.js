@@ -197,7 +197,7 @@ app.route('/bom')
 								is_configurable: undefined,
 								is_collapsible: false,
 								target_id: "RY2"
-			}]
+			}];
 			
 			if(validationCheck(bomArray, res, 'BOM')){
 				var envConfiguration = new EnvironmentConf(req);
