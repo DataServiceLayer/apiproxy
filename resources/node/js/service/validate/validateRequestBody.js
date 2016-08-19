@@ -107,7 +107,7 @@ exports.validatePartRequestBody = function(partArray){
 							required : true
 						},
 						target_id: {
-							type : 'integer',
+							type : 'string',
 							required : true
 						}
 					}
@@ -228,7 +228,7 @@ exports.validateBOMRequestBody = function(bomArray){
 							required : true
 						},
 						target_id: {
-							type : 'integer',
+							type : 'string',
 							required : true
 						}
 					}

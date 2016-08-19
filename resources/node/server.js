@@ -124,7 +124,7 @@ app.route('/part')
 					previous_version: "",
 					is_configurable: "standard",
 					is_collapsible: false,
-					target_id: 1
+					target_id: "RY1"
 			}];
 
 		 	
@@ -196,7 +196,7 @@ app.route('/bom')
 								previous_version: "A",
 								is_configurable: undefined,
 								is_collapsible: false,
-								target_id: 7
+								target_id: "RY2"
 			}];
 			
 			if(validationCheck(bomArray, res, 'BOM')){
