@@ -2,17 +2,37 @@ var http = require('http');
 var jdbc = require('C:/Program Files/nodejs/node_modules/npm/node_modules/trireme-jdbc');
 var loggy = require('./logger/logger.js')();
 var mapper = require('./mapper/controlsPLMMapper.js');
+var configjs = require('./config/config.js');
 
-	var db = new jdbc.Database({
-		  url: 'jdbc:datadirect:openedge://c217u083.cg.na.jci.com:50963;DatabaseName=symix',
-		  properties: {
-			user: 'E2Open',
-			password: 'nepO2E01',
-		  },
-		  minConnections: 1,
-		  maxConnections: 20,
-		  idleTimeout: 100
-	});
+var db = '';	
+
+exports.getConnection = function(configObj){
+
+	loggy.info('Symix DB connection starts');
+
+		try{
+			if(!configObj.error){
+				db = new jdbc.Database({
+					  url: 'jdbc:datadirect:openedge://'+configObj.Host+':'+configObj.socketNumber+';DatabaseName='+configObj.dbID,
+					  properties: {
+						user: 'E2Open',
+						password: 'nepO2E01',
+					  },
+					  minConnections: 1,
+					  maxConnections: 20,
+					  idleTimeout: 100
+				});
+			}else{
+				loggy.debug('Symix db connection failed for invalid plantCode with response: '+configObj);
+			}
+		}catch(err){
+			loggy.error('Symix db connection failed with error: '+ err);
+		}
+		
+	loggy.info('Symix DB connection ends');
+};
+
+this.getConnection(configjs.returnConfigObj('local'));
 
 var errorObject= {};
 
@@ -26,47 +46,54 @@ exports.getBom = function(erpName, region, plantCode, bomNumber, envConfiguratio
 	var regionValid = ((region != undefined) && (region != '')) ? true : false;
 	var plantCodeValid = ((plantCode != undefined) && (plantCode != '')) ? true : false;
 
-	if(erpNameValid && bomNumberValid && regionValid && plantCodeValid){
-	
-		db.execute('SELECT item, job FROM item where job = ?',[bomNumber],
-				  function(err,result,  rows) {
-					  loggy.debug('Error msg: '+err+' result: '+result+' rows: '+ rows);
-						if((err == undefined) && (rows != '')){
-							rows.forEach(function (row) {
-							  console.log('Row: %j', row);
-							  loggy.debug('BOM fetching is successfull for bomNumber: '+(bomNumber ));
-							  loggy.info('BOM fetching is successfull.');
-							  return callback(mapper.fetchBOMObjectMapper(row));
-							});
-						}else{
-							loggy.debug('BOM fetching failed for bomNumber:'+bomNumber);
-							loggy.info('BOM fetching failed.');
-							return callback(mapper.errorBOMNoMapper(bomNumber));
-						}
-					}
-		);
-	}else if(!erpNameValid){
-		errorObject = mapper.getBOMErrorMessageResponse(1);
-		loggy.info('Invalid ERPName while fetching bom');
-		loggy.debug('Invalid ERPName while fetching bom for ERPName: '+erpName);
-		return callback(errorObject);
-	}else if(!itemNumberValid){
-		errorObject = mapper.getBOMErrorMessageResponse(2);
-		loggy.info('Invalid BOMNumber while fetching bom');
-		loggy.debug('Invalid BOMNumber while fetching bom for BOMNumber: '+bomNumber);
-		return callback(errorObject);
-	}else if(!region){
-		errorObject = mapper.getBOMErrorMessageResponse(3);
-		loggy.info('Invalid Region while fetching bom');
-		loggy.debug('Invalid Region while fetching bom for Region: '+region);
-		return callback(errorObject);
-	}else if(!plantCode){
-		errorObject = mapper.getBOMErrorMessageResponse(4);
-		loggy.info('Invalid PlantCode while fetching bom');
-		loggy.debug('Invalid PlantCode while fetching bom for PlantCode: '+plantCode);
-		return callback(errorObject);
-	}else{
-		errorObject = mapper.getBOMErrorMessageResponse(5);
+	try{
+			if(erpNameValid && bomNumberValid && regionValid && plantCodeValid){
+			
+				db.execute('SELECT item, job FROM item where job = ?',[bomNumber],
+						  function(err,result,  rows) {
+							  loggy.debug('Error msg: '+err+' result: '+result+' rows: '+ rows);
+								if((err == undefined) && (rows != '')){
+									rows.forEach(function (row) {
+									  console.log('Row: %j', row);
+									  loggy.debug('BOM fetching is successfull for bomNumber: '+(bomNumber ));
+									  loggy.info('BOM fetching is successfull.');
+									  return callback(mapper.fetchBOMObjectMapper(row));
+									});
+								}else{
+									loggy.debug('BOM fetching failed for bomNumber:'+bomNumber);
+									loggy.info('BOM fetching failed.');
+									return callback(mapper.errorBOMNoMapper(bomNumber));
+								}
+							}
+				);
+			}else if(!erpNameValid){
+				errorObject = mapper.getBOMErrorMessageResponse(1);
+				loggy.info('Invalid ERPName while fetching bom');
+				loggy.debug('Invalid ERPName while fetching bom for ERPName: '+erpName);
+				return callback(errorObject);
+			}else if(!itemNumberValid){
+				errorObject = mapper.getBOMErrorMessageResponse(2);
+				loggy.info('Invalid BOMNumber while fetching bom');
+				loggy.debug('Invalid BOMNumber while fetching bom for BOMNumber: '+bomNumber);
+				return callback(errorObject);
+			}else if(!region){
+				errorObject = mapper.getBOMErrorMessageResponse(3);
+				loggy.info('Invalid Region while fetching bom');
+				loggy.debug('Invalid Region while fetching bom for Region: '+region);
+				return callback(errorObject);
+			}else if(!plantCode){
+				errorObject = mapper.getBOMErrorMessageResponse(4);
+				loggy.info('Invalid PlantCode while fetching bom');
+				loggy.debug('Invalid PlantCode while fetching bom for PlantCode: '+plantCode);
+				return callback(errorObject);
+			}else{
+				errorObject = mapper.getBOMErrorMessageResponse(5);
+				loggy.info('An unexpected error occurred on the server while fetching BOM');
+				loggy.debug('An unexpected error occurred on the server while fetching BOM');
+				return callback(errorObject);
+			}
+	}catch(err){
+		errorObject = mapper.getPartErrorMessageResponse(5);
 		loggy.info('An unexpected error occurred on the server while fetching BOM');
 		loggy.debug('An unexpected error occurred on the server while fetching BOM');
 		return callback(errorObject);

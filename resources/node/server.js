@@ -15,6 +15,7 @@ var requestBodyValidation = require('./js/service/validate/validateRequestBody.j
 var createOrder = require('./js/createRequest.js');
 var part = require('./js/service/part.js');
 var bom = require('./js/service/bom.js');
+var configjs = require('./js/service/config/config.js');
 
 var port = 9001;
 var app = express();
@@ -129,7 +130,6 @@ app.route('/part')
 			}];
 
 		 	partArray = requestBodyMap.changePartValues(partArray);
-			console.log(partArray);
 			
 			if(validationCheck(partArray,res, 'PART')){
 				var envConfiguration = new EnvironmentConf(req);
@@ -202,7 +202,6 @@ app.route('/bom')
 			}];
 			
 			bomArray = requestBodyMap.changePartValues(bomArray);
-			console.log(bomArray);
 			
 			if(validationCheck(bomArray, res, 'BOM')){
 				var envConfiguration = new EnvironmentConf(req);
