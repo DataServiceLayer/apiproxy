@@ -121,7 +121,7 @@ exports.validatePartRequestBody = function(partArray){
 		loggy.debug('validation results: ' + JSON.stringify(results.errors));
 		loggy.debug('validateRequestBody ends');
 		
-		return createErrorMessage(results.errors);
+		return createErrorMessage(results.errors)
 }
 
 
